@@ -18,15 +18,23 @@ from PIL import Image, ImageEnhance
 import ffmpeg
 import argparse
 from threading import Thread
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request, send_from_directory, redirect, url_for
+from werkzeug.utils import secure_filename
+
 from Player import Player
+from Files import Files
 
 
 # Ensure this is the correct import for your particular screen
 from waveshare_epd import epd7in5_V2
 
+player = {}
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(
+    os.path.realpath(__file__)), 'Videos')
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'mp4'}
+
 
 i = "hallo"
 
@@ -57,12 +65,65 @@ def send_js():
     # return send_static_file('grap.jpg')
 
 
-@app.route('/post/<string:post_id>')
-def show_post(post_id):
-    # show the post with the given id, the id is an integer
-    global i
-    i = post_id
-    return 'Post %s ' % post_id
+@app.route('/files', methods=['GET'])
+def file_list():
+    # player = Player(file='.')
+    files = Files()
+    fileList = files.list()
+    resp = {}
+    resp['files'] = fileList
+    resp['meta'] = {}
+    resp['meta']['count'] = len(fileList)
+    return jsonify(resp)
+
+
+@app.route('/files', methods=['POST'])
+def add_file():
+    # check if the post request has the file part
+    if 'file' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
+    file = request.files['file']
+    # if user does not select file, browser also
+    # submit an empty part without filename
+    if file.filename == '':
+        flash('No selected file')
+        return redirect(request.url)
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        return "1", 201
+
+    return "bad request", 400
+    # player = Player(file='.')
+    # files = Files()
+    # return jsonify((files.list()))
+
+
+@app.route('/files/<filename>', methods=['GET'])
+def get_file(filename):
+    files = Files()
+    try:
+        file = files.getFile(filename)
+    except FileNotFoundError:
+        # doesn't exist
+        return "0", 404
+    except:
+        return "unkown", 400
+
+    return jsonify(file)
+
+
+@app.route('/files/<filename>', methods=['DELETE'])
+def delete_file(filename):
+    try:
+        os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    except FileNotFoundError:
+        # doesn't exist
+        return "0", 404
+    except:
+        return "unkown", 400
+    return "1", 200
 
 
 class FlaskThread(Thread):
@@ -92,7 +153,7 @@ def parse_args():
                         help="brighten factor")
     parser.add_argument('-s', '--start',
                         help="Start at a specific frame")
-    parser.add_argument('-w', '--webserver',
+    parser.add_argument('-w', '--webserver', default=False, action='store_true',
                         help="Start admin server")
     args = parser.parse_args()
     return args
@@ -101,6 +162,7 @@ def parse_args():
 def main():
     args = parse_args()
     print(args)
+    global player
     player = Player(file=args.file, delay=args.delay,
                     frames=args.inc, brighten=args.brighten)
     player.Dump()
@@ -114,6 +176,11 @@ def main():
     # slowmovie(args)
 
     player.play()
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 if __name__ == '__main__':

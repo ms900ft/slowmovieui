@@ -2,3 +2,5 @@ Videos/**
 grab.jpg
 hidde/**
 logs/**
+*pyc
+__pycache__/*

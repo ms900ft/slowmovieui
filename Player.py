@@ -2,6 +2,7 @@ import os
 import time
 import sys
 import random
+import fnmatch
 from PIL import Image, ImageEnhance
 import ffmpeg
 from waveshare_epd import epd7in5_V2
@@ -23,6 +24,21 @@ class Player:
 
     def Dump(self):
         print(self.__dict__)
+
+    def Dump2(self):
+        print(self.__dict__)
+
+    def files(self):
+        listOfFiles = os.listdir(self.viddir)
+        pattern = "*.mp4"
+        files = []
+        for entry in listOfFiles:
+            if fnmatch.fnmatch(entry, pattern):
+                file = {}
+                file['filename'] = entry
+                files.append(file)
+                print(entry)
+                return files
 
     def play(self):
         frameDelay = float(self.delay)
