@@ -114,6 +114,21 @@ def get_file(filename):
     return jsonify(file)
 
 
+@app.route('/files/<filename>/play', methods=['PUT'])
+def play_file(filename):
+    files = Files()
+    try:
+        file = files.getFile(filename)
+    except FileNotFoundError:
+        # doesn't exist
+        return "0", 404
+    except:
+        return "unkown", 400
+    global player
+    player.SetFile(filename)
+    return "1", 200
+
+
 @app.route('/files/<filename>', methods=['DELETE'])
 def delete_file(filename):
     try:
@@ -165,6 +180,7 @@ def main():
     global player
     player = Player(file=args.file, delay=args.delay,
                     frames=args.inc, brighten=args.brighten)
+    player.Load()
     player.Dump()
     if args.webserver == True:
         server = FlaskThread()

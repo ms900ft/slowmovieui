@@ -6,6 +6,8 @@ import fnmatch
 from PIL import Image, ImageEnhance
 import ffmpeg
 from waveshare_epd import epd7in5_V2
+from Files import Files
+import json
 
 
 class Player:
@@ -21,11 +23,18 @@ class Player:
             os.path.realpath(__file__)), 'Videos/')
         self.logdir = os.path.join(os.path.dirname(
             os.path.realpath(__file__)), 'logs/')
+        self.spool = os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), 'spool/')
 
     def Dump(self):
         print(self.__dict__)
 
     def Dump2(self):
+        print(self.__dict__)
+
+    def SetFile(self, filename):
+        print("playing %s" % filename)
+        self.file = filename
         print(self.__dict__)
 
     def files(self):
@@ -39,6 +48,26 @@ class Player:
                 files.append(file)
                 print(entry)
                 return files
+
+    def Load(self):
+        conf = os.path.join(self.spool, "movielist.json")
+        if os.path.exists(conf):
+            print("reading movielist")
+            with open(conf) as fp:
+                data = json.load(fp)
+            self.movies = data
+        else:
+            files = Files()
+            fileList = files.list()
+            self.movies = fileList
+            self.Save()
+        print(self.movies)
+
+    def Save(self):
+        conf = os.path.join(self.spool, "movielist.json")
+        print("writting movielist")
+        with open(conf, 'w') as fp:
+            json.dump(self.movies, fp, indent=4)
 
     def play(self):
         frameDelay = float(self.delay)
