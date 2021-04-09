@@ -30,4 +30,6 @@ def fileInfo(path, filename):
     statinfo = os.stat(os.path.join(path, filename))
     file['size'] = statinfo.st_size
     file['mod'] = statinfo.st_mtime
+    file['frame_count'] = 0
+    file['position'] = 0
     return file

@@ -1,12 +1,16 @@
 [
     {
-        "filename": "psycho.mp4",
-        "size": 730724780,
-        "mod": 1616827345.306279
+        "filename": "test.mp4",
+        "frame_count": 119,
+        "mod": 1617373966.7906685,
+        "position": 116,
+        "size": 876707
     },
     {
-        "filename": "test.mp4",
-        "size": 876707,
-        "mod": 1617373966.7906685
+        "filename": "psycho.mp4",
+        "frame_count": 156350,
+        "mod": 1616827345.306279,
+        "position": 1044,
+        "size": 730724780
     }
 ]

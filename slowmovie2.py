@@ -68,13 +68,22 @@ def send_js():
 @app.route('/files', methods=['GET'])
 def file_list():
     # player = Player(file='.')
-    files = Files()
-    fileList = files.list()
+    global player
+
     resp = {}
-    resp['files'] = fileList
+    resp['files'] = player.movies
     resp['meta'] = {}
-    resp['meta']['count'] = len(fileList)
+    resp['meta']['count'] = len(player.movies)
     return jsonify(resp)
+
+
+@app.route('/files/list', methods=['PUT'])
+def update_list():
+    content = request.json
+    print(content)
+    global player
+    player.movies = content['files']
+    return jsonify(content), 200
 
 
 @app.route('/files', methods=['POST'])
@@ -191,7 +200,7 @@ def main():
 
     # slowmovie(args)
 
-    player.play()
+    player.Play()
 
 
 def allowed_file(filename):
