@@ -83,7 +83,7 @@ class Player:
             # print(movie)
             if movie['frame_count'] == 0:
                 movie['frame_count'] = self.frameCount(movie['filename'])
-            if movie['position'] + self.frames > movie['frame_count']:
+            if movie['position'] + int(self.frames) > int(movie['frame_count']):
                 print("next movie")
                 continue
             frame = float(movie['position'])
@@ -92,7 +92,7 @@ class Player:
             print("playing %s von pos %f" %
                   (movie['filename'], frame))
             #print("ssajjsasajk %s %s" % movie['filename'], frame)
-            movie['position'] = movie['position'] + self.frames
+            movie['position'] = int(movie['position']) + int(self.frames)
             self.Save()
             break
         return True
@@ -122,7 +122,20 @@ class Player:
         self.Load()
         while self.nextFrame():
             print("next")
-            time.sleep(2)
+            #time.sleep(2)
+            epd = epd7in5_V2.EPD()
+            pil_im = Image.open(self.__epaperImage)
+            enhancer = ImageEnhance.Brightness(pil_im)
+            # brightens the image
+            enhanced_im = enhancer.enhance(float(self.brighten))
+            enhanced_im.convert(mode='1', dither=Image.FLOYDSTEINBERG)
+
+            # Dither the image into a 1 bit bitmap (Just zeros and ones)
+            # pil_im = pil_im.convert(mode='1',dither=Image.FLOYDSTEINBERG)
+
+            # display the image
+            epd.display(epd.getbuffer(enhanced_im))
+
 
     def play(self):
         frameDelay = float(self.delay)
