@@ -6,3 +6,4 @@ logs/**
 __pycache__/*
 spool/movielist.json
 spool/paper.jpg
+spool/movielist.json

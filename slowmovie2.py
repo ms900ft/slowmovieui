@@ -19,6 +19,7 @@ import ffmpeg
 import argparse
 from threading import Thread
 from flask import Flask, jsonify, request, send_from_directory, redirect, url_for
+from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
 
 from Player import Player
@@ -34,6 +35,7 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), 'Videos')
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'mp4'}
+cors = CORS(app)
 
 
 i = "hallo"
@@ -66,6 +68,7 @@ def send_js():
 
 
 @app.route('/files', methods=['GET'])
+@cross_origin()
 def file_list():
     # player = Player(file='.')
     global player
@@ -78,11 +81,12 @@ def file_list():
 
 
 @app.route('/files/list', methods=['PUT'])
+@cross_origin()
 def update_list():
     content = request.json
     print(content)
     global player
-    player.movies = content['files']
+    player.movies = content
     return jsonify(content), 200
 
 
