@@ -17,6 +17,22 @@ export default {
     .then(response => {
       return response
     })
-}
+  },
+    upload(file, onUploadProgress) {
+      let formData = new FormData();
+      console.log('-44-----------------------------------');
+      console.log(file);
+      console.log('------------------------------------');
+      formData.append("file", file);
+      formData.append("ss", "xxxx");
+      console.log(formData);
+      return axios.post("/files", formData, {
+        // headers: {
+        //   "Content-Type": "multipart/form-data"
+        // },
+        onUploadProgress
+      });
+    }
+
 
 }

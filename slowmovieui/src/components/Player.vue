@@ -4,44 +4,35 @@
                 <v-row align-content="stretch">
                     <v-col>
                         <v-list three-line class="list1">
-                            <drop-list :items="items1" @reorder="$event.apply(items1)" @insert="insert1" mode="cut">
-                                <template v-slot:item="{item, reorder}">
-                                    <drag :key="item.filename" :data="item" @cut="remove(items1, item)">
-                                        <v-list-item style="background-color: white"
-                                                     :style="reorder ? {borderLeft: '2px solid #1976D2', marginLeft:'-2px'} : {}">
-                                            <v-list-item-avatar>
-                                                 <v-icon>mdi-video-vintage</v-icon>
-                                            </v-list-item-avatar>
-                                            <v-list-item-content>
-                                                <v-list-item-title v-html="item.filename"/>
-                                                <!-- <v-list-item-subtitle v-html="item.subtitle"/> -->
-                                            </v-list-item-content>
-                                        </v-list-item>
-                                        <v-divider/>
-                                    </drag>
-                                </template>
-                                <template v-slot:inserting-drag-image="{data}">
-                                    <v-list-item-avatar style="transform:translate(-50%, -50%) scale(1.5)">
-                                        <img :src="data.avatar">
-                                    </v-list-item-avatar>
-                                </template>
-                                <template v-slot:reordering-drag-image/>
-                                <template v-slot:feedback="{data}">
-                                    <v-skeleton-loader
-                                            type="list-item-avatar-three-line"
-                                            :key="data.title"
-                                            style="border-left: 2px solid #1976D2; margin-left: -2px;"
-                                    />
-                                </template>
-                            </drop-list>
-                        </v-list>
-                    </v-col>
+                          <draggable v-model="items1" class="row">
+<v-col
+    cols="12"
+    v-for="(item) in items1"
+    :key="item.filename"
+    style="font-weight:bold"
+  >
+    {{item.filename}}
+     <v-slider
+      :value="getPostion(item)"
+       min="0"
+       :max="getMax(item)"
+      thumb-label
+      :thumb-size="48"
+      @change="changePostion(item,$event)"
+      hint="kdskdkdsk"
+      persistent-hint
+    ></v-slider>
 
-                </v-row>
+  </v-col>
+                          </draggable>
+
                  <v-btn   @click="saveList()">
                     save
                     <v-icon right >mdi-content-save</v-icon>
                   </v-btn>
+                        </v-list>
+                    </v-col>
+                </v-row>
             </v-container>
 </template>
 
@@ -49,13 +40,15 @@
 
 <script>
 import slowMovieApi from '@/services/SlowMovieApi'
-import {Drag,DropList} from "vue-easy-dnd";
+// import {Drag,DropList} from "vue-easy-dnd";
+import draggable from  "vuedraggable"
 
 export default {
   name: 'Player',
   components: {
-            Drag,
-            DropList,
+            // Drag,
+            // DropList,
+            draggable,
 
         },
   props: {
@@ -73,6 +66,17 @@ export default {
   },
   mounted () {
     this.getMovies()
+  },
+  computed: {
+    duration: {
+      set: function(val) {
+        this.items1[1].position = val;
+        // If necessary, also copy val into an external variable here
+      },
+      get: function() {
+        return this.items1[1].position
+      }
+    }
   },
   methods: {
     getMovies ($state) {
@@ -122,7 +126,22 @@ export default {
     remove(array, value) {
                 let index = array.indexOf(value);
                 array.splice(index, 1);
-            }
+            },
+    changePostion(item, value) {
+      console.log(value);
+      item.position = value * 25 *60;
+    },
+    getPostion(item) {
+      const i = parseInt(item.position / 25 /60);
+      console.log(i);
+      return i;
+    },
+    getMax(item) {
+      const i = parseInt(item.frame_count / 25 /60);
+      console.log(i);
+      return i;
+    }
+
   },
 
 }
