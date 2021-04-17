@@ -18,13 +18,17 @@ export default {
       return response
     })
   },
+  delete(item) {
+    return axios.delete('/files/'+ item.filename, {
+
+      })
+      .then(response => {
+        return response
+      })
+  },
     upload(file, onUploadProgress) {
       let formData = new FormData();
-      console.log('-44-----------------------------------');
-      console.log(file);
-      console.log('------------------------------------');
       formData.append("file", file);
-      formData.append("ss", "xxxx");
       console.log(formData);
       return axios.post("/files", formData, {
         // headers: {

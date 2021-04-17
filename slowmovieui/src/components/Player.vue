@@ -1,173 +1,190 @@
 <template>
+  <v-container fluid>
+    <v-row align-content="stretch">
+      <v-col>
+        <v-list three-line class="list1">
+          <draggable v-model="movies" class="row">
+            <v-col
+              cols="12"
+              v-for="(item, index) in movies"
+              :key="item.filename"
+              style="font-weight: bold"
+            >
+              <div style="width: 30%; float: left">
+                {{ item.filename }}
+              </div>
+              <div style="float: left; width: 50%">
+                <v-slider
+                  :value="getPostion(item)"
+                  min="0"
+                  :max="getMax(item)"
+                  thumb-label
+                  :thumb-size="48"
+                  @change="changePostion(item, $event)"
+                  persistent-hint
+                ></v-slider>
+              </div>
+              <div style="float:left;width=20%">
+                <v-icon @click="deleteMovie(item, index)" right
+                  >mdi-delete-forever-outline</v-icon
+                >
+              </div>
+            </v-col>
+          </draggable>
 
-        <v-container fluid>
-                <v-row align-content="stretch">
-                    <v-col>
-                        <v-list three-line class="list1">
-                          <draggable v-model="items1" class="row">
-<v-col
-    cols="12"
-    v-for="(item) in items1"
-    :key="item.filename"
-    style="font-weight:bold"
-  >
-    {{item.filename}}
-     <v-slider
-      :value="getPostion(item)"
-       min="0"
-       :max="getMax(item)"
-      thumb-label
-      :thumb-size="48"
-      @change="changePostion(item,$event)"
-      hint="kdskdkdsk"
-      persistent-hint
-    ></v-slider>
-
-  </v-col>
-                          </draggable>
-
-                 <v-btn   @click="saveList()">
-                    save
-                    <v-icon right >mdi-content-save</v-icon>
-                  </v-btn>
-                        </v-list>
-                    </v-col>
-                </v-row>
-            </v-container>
+          <v-btn @click="saveList()">
+            save
+            <v-icon right>mdi-content-save</v-icon>
+          </v-btn>
+        </v-list>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 
 
 <script>
-import slowMovieApi from '@/services/SlowMovieApi'
+import slowMovieApi from '@/services/SlowMovieApi';
 // import {Drag,DropList} from "vue-easy-dnd";
-import draggable from  "vuedraggable"
+import draggable from 'vuedraggable';
 
 export default {
   name: 'Player',
   components: {
-            // Drag,
-            // DropList,
-            draggable,
-
-        },
+    // Drag,
+    // DropList,
+    draggable
+  },
   props: {
     //msg: String
-
   },
-  data () {
+  data() {
     return {
       msg: 'testxx',
       total: 0,
       movies: [],
-      items1: [],
-      items2:[],
-    }
+     // items1: [],
+    };
   },
-  mounted () {
-    this.getMovies()
+  mounted() {
+    this.getMovies();
   },
   computed: {
     duration: {
       set: function(val) {
-        this.items1[1].position = val;
+        this.movies[1].position = val;
         // If necessary, also copy val into an external variable here
       },
       get: function() {
-        return this.items1[1].position
+        return this.movies[1].position;
       }
     }
   },
   methods: {
-    getMovies ($state) {
+    getMovies($state) {
       // this.loading = true
 
       slowMovieApi
         .fetchMovieCollection(this)
-        .then((response) => {
+        .then(response => {
           //this.wholeResponse.push(...response.data)
           //this.$store.commit('setResultsFound', response.meta.total)
-          this.total = response.data.meta.count
-          this.items1 = response.data.files
-          this.loading = false
+          this.total = response.data.meta.count;
+          this.movies = response.data.files;
+          //this.$store.commit('setVideos', response.data.files)
+          this.loading = false;
           if ($state) {
             if (!response.data.length) {
-              $state.complete()
+              $state.complete();
             }
-            $state.loaded()
+            $state.loaded();
           }
         })
-        .catch((error) => {
-          console.log(error)
-        })
+        .catch(error => {
+          console.log(error);
+        });
       if ($state) {
         // $state.complete();
       }
     },
     saveList() {
       slowMovieApi
-        .updateList(this.items1)
-        .then((response) => {
+        .updateList(this.movies)
+        .then(response => {
           console.log('------------------------------------');
-          console.log(this.items1);
-          console.log(response)
+          console.log(this.movies);
+          console.log(response);
           console.log('------------------------------------');
         })
-       .catch((error) => {
-          console.log(error)
-        })
+        .catch(error => {
+          console.log(error);
+        });
     },
-     insert1(event) {
-                this.items1.splice(event.index, 0, event.data);
-            },
-    insert2(event) {
-                this.items2.splice(event.index, 0, event.data);
-            },
+    deleteMovie(item, index) {
+      slowMovieApi
+        .delete(item)
+        .then(response => {
+          console.log('------------------------------------');
+          console.log(item);
+          console.log(response);
+          console.log('------------------------------------');
+          this.movies.splice(index, 1);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    insert1(event) {
+      this.movies.splice(event.index, 0, event.data);
+    },
     remove(array, value) {
-                let index = array.indexOf(value);
-                array.splice(index, 1);
-            },
+      let index = array.indexOf(value);
+      array.splice(index, 1);
+    },
     changePostion(item, value) {
-      console.log(value);
-      item.position = value * 25 *60;
+      item.position = value * 25 * 60;
     },
     getPostion(item) {
-      const i = parseInt(item.position / 25 /60);
-      console.log(i);
+      const i = parseInt(item.position / 25 / 60);
       return i;
     },
     getMax(item) {
-      const i = parseInt(item.frame_count / 25 /60);
-      console.log(i);
+      const i = parseInt(item.frame_count / 25 / 60);
       return i;
     }
-
   },
-
-}
+  watch: {
+    '$store.state.listChanged'() {
+      //console.log('itemwatch')
+      this.getMovies();
+      this.$store.commit('setListChanged', false);
+    }
+  }
+};
 </script>
 
 <style>
-    html,
-    body {
-        height: 100%;
-        font-family: "Roboto";
-    }
+html,
+body {
+  height: 100%;
+  font-family: 'Roboto';
+}
 
-    .list1 {
-        height: 100%;
-    }
+.list1 {
+  height: 100%;
+}
 
-    .list2 {
-        display: flex;
-        height: 100%;
-    }
+.list2 {
+  display: flex;
+  height: 100%;
+}
 
-    .chip {
-        margin: 10px;
-    }
+.chip {
+  margin: 10px;
+}
 
-    .drop-allowed.drop-in * {
-        cursor: inherit !important;
-    }
+.drop-allowed.drop-in * {
+  cursor: inherit !important;
+}
 </style>

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import axios from 'axios'
+import store from './store'
 
 import {
   router
@@ -22,7 +23,7 @@ new Vue({
   //vuetify,
   render: h => h(App),
 
-  //store,
+  store,
   router,
 
   vuetify,

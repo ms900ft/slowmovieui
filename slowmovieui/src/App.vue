@@ -86,11 +86,13 @@ export default {
           //this.message = response.data.message;
           this.message = 'file uploaded!';
           this.currentFile = undefined;
+          this.$store.commit('setListChanged', true)
+               // this.loading = true
+
+
+
           //return UploadService.getFiles();
         })
-        // .then(files => {
-        //   this.fileInfos = files.data;
-        // })
         .catch(() => {
           this.progress = 0;
           this.message = 'Could not upload the file!';
