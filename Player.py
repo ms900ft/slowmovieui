@@ -6,12 +6,12 @@ import fnmatch
 from PIL import Image, ImageEnhance
 import ffmpeg
 from waveshare_epd import epd7in5_V2
-from Files import Files
+from Files import Files, fileInfo
 import json
 
 
 class Player:
-    def __init__(self, file, delay=60, frames=10, start_width=0, brighten=1,
+    def __init__(self, file, delay=60, frames=10, start_width=0, brighten='2',
                  random=False, frame=0, width=800, height=480):
         self.file = file
         self.delay = delay
@@ -65,6 +65,19 @@ class Player:
         print("playing %s" % filename)
         self.file = filename
         print(self.__dict__)
+
+    def AddFile(self, filename):
+        file = fileInfo(self.viddir,filename)
+        match = False
+        i=0
+        for entry in self.movies:
+            if entry['filename'] == file['filename']:
+                self.movies[i] = file
+                match = True
+            i = i +1
+        if match == False:
+            self.movies.append(file)
+        self.Save()
 
     def files(self):
         listOfFiles = os.listdir(self.viddir)
@@ -121,7 +134,7 @@ class Player:
         self.initEpaper()
         self.Load()
         while self.nextFrame():
-            print("next")
+            #print("next")
             #time.sleep(2)
             epd = epd7in5_V2.EPD()
             pil_im = Image.open(self.__epaperImage)
@@ -135,6 +148,7 @@ class Player:
 
             # display the image
             epd.display(epd.getbuffer(enhanced_im))
+            time.sleep(int(self.delay))
 
 
     def play(self):
