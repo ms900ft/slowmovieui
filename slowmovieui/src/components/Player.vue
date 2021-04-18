@@ -1,19 +1,28 @@
 <template>
   <v-container fluid>
+
+
     <v-row align-content="stretch">
+      <v-col cols="2">
+    <v-img
+  max-height="150"
+  max-width="250"
+  src="http://slowmovie:8888/img/paper.jpg"
+></v-img>
+      </v-col>
       <v-col>
         <v-list three-line class="list1">
-          <draggable v-model="movies" class="row">
+          <draggable v-model="movies" @change="saveList" class="row">
             <v-col
-              cols="12"
+              cols="10"
               v-for="(item, index) in movies"
               :key="item.filename"
               style="font-weight: bold"
             >
-              <div style="width: 30%; float: left">
+              <div style="width:50%;float:left">
                 {{ item.filename }}
               </div>
-              <div style="float: left; width: 50%">
+              <div style="float: left;width:200px">
                 <v-slider
                   :value="getPostion(item)"
                   min="0"
@@ -24,6 +33,31 @@
                   persistent-hint
                 ></v-slider>
               </div>
+                <div style="float: left">
+                <v-menu offset-y>
+
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          color="primary"
+          dark
+          v-bind="attrs"
+          v-on="on"
+        >
+        <v-icon v-if="brTitel(item)===''">mdi-brightness-5</v-icon>
+          {{brTitel(item)}}
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item
+          v-for="(itemx, index) in brigthen"
+          :key="index"
+           @click="item.brightness=itemx" >
+
+          <v-list-item-title>{{ itemx }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+              </div>
               <div style="float:left;width=20%">
                 <v-icon @click="deleteMovie(item, index)" right
                   >mdi-delete-forever-outline</v-icon
@@ -32,10 +66,6 @@
             </v-col>
           </draggable>
 
-          <v-btn @click="saveList()">
-            save
-            <v-icon right>mdi-content-save</v-icon>
-          </v-btn>
         </v-list>
       </v-col>
     </v-row>
@@ -64,6 +94,7 @@ export default {
       msg: 'testxx',
       total: 0,
       movies: [],
+      brigthen: [0,0.5,1,1.5,2,2.5,3]
      // items1: [],
     };
   },
@@ -82,17 +113,21 @@ export default {
     }
   },
   methods: {
+    brTitel(item) {
+      if (typeof item.brightness !== 'undefined') {
+        return item.brightness;
+
+      }
+      return "";
+    },
     getMovies($state) {
       // this.loading = true
 
       slowMovieApi
         .fetchMovieCollection(this)
         .then(response => {
-          //this.wholeResponse.push(...response.data)
-          //this.$store.commit('setResultsFound', response.meta.total)
           this.total = response.data.meta.count;
           this.movies = response.data.files;
-          //this.$store.commit('setVideos', response.data.files)
           this.loading = false;
           if ($state) {
             if (!response.data.length) {
@@ -135,15 +170,9 @@ export default {
           console.log(error);
         });
     },
-    insert1(event) {
-      this.movies.splice(event.index, 0, event.data);
-    },
-    remove(array, value) {
-      let index = array.indexOf(value);
-      array.splice(index, 1);
-    },
     changePostion(item, value) {
       item.position = value * 25 * 60;
+      this.saveList()
     },
     getPostion(item) {
       const i = parseInt(item.position / 25 / 60);
@@ -187,4 +216,17 @@ body {
 .drop-allowed.drop-in * {
   cursor: inherit !important;
 }
+
+.v-text-field.v-text-field--solo .v-input__control{
+    min-height: 10px;
+}
+
+.v-label{
+  font-size: 10px;
+}
+
+
+
+
+
 </style>
