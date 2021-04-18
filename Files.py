@@ -32,4 +32,7 @@ def fileInfo(path, filename):
     file['mod'] = statinfo.st_mtime
     file['frame_count'] = 0
     file['position'] = 0
+    file['brightness'] = 1
+    file['frames_per_delay'] = 10
+    file['delay'] = 60
     return file

@@ -57,9 +57,9 @@ def test():
 
 
 
-@app.route('/img/grap.jpg')
-def send_js():
-    return send_from_directory('.', 'grab.jpg')
+@app.route('/img/<path:filename>')
+def send_img(filename):
+    return send_from_directory(app.root_path + '/spool', filename)
     # x = send_static_file('grap.jpg')
     # return send_static_file('grap.jpg')
 
@@ -161,6 +161,7 @@ def play_file(filename):
 
 
 @app.route('/files/<filename>', methods=['DELETE'])
+@cross_origin()
 def delete_file(filename):
     try:
         os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -169,6 +170,7 @@ def delete_file(filename):
         return "0", 404
     except:
         return "unkown", 400
+    player.DeleteFile(filename)
     return "1", 200
 
 
@@ -212,7 +214,6 @@ def main():
     player = Player(file=args.file, delay=args.delay,
                     frames=args.inc, brighten=args.brighten)
     player.Load()
-    player.Dump()
     if args.webserver == True:
         server = FlaskThread()
         server.daemon = True
