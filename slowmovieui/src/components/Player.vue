@@ -51,7 +51,7 @@
         <v-list-item
           v-for="(itemx, index) in brigthen"
           :key="index"
-           @click="item.brightness=itemx" >
+           @click="changeBr(item,itemx)" >
 
           <v-list-item-title>{{ itemx }}</v-list-item-title>
         </v-list-item>
@@ -59,7 +59,7 @@
     </v-menu>
               </div>
               <div style="float:left;width=20%">
-                <v-icon @click="deleteMovie(item, index)" right
+                <v-icon @click="deleteMovie(item, index)" right large
                   >mdi-delete-forever-outline</v-icon
                 >
               </div>
@@ -181,6 +181,10 @@ export default {
     getMax(item) {
       const i = parseInt(item.frame_count / 25 / 60);
       return i;
+    },
+    changeBr(item,value) {
+      item.brightness = value;
+      this.saveList()
     }
   },
   watch: {
