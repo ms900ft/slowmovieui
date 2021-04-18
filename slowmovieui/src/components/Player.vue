@@ -7,7 +7,8 @@
     <v-img
   max-height="150"
   max-width="250"
-  src="http://slowmovie:8888/img/paper.jpg"
+  :src="imageUrl"
+
 ></v-img>
       </v-col>
       <v-col>
@@ -94,10 +95,17 @@ export default {
       msg: 'testxx',
       total: 0,
       movies: [],
-      brigthen: [0,0.5,1,1.5,2,2.5,3]
+      brigthen: [0,0.5,1,1.5,2,2.5,3],
+      imageUrl: this.$baseURL +'/img/paper.jpg'
      // items1: [],
     };
   },
+  created () {
+  this.interval = setInterval(this.refreshData, 60000)
+},
+beforeDestroy () {
+  clearInterval(this.interval)
+},
   mounted() {
     this.getMovies();
   },
@@ -119,6 +127,9 @@ export default {
 
       }
       return "";
+    },
+    refreshData() {
+      this.imageUrl = this.$baseURL + '/img/paper.jpg?x=' + new Date().getTime();
     },
     getMovies($state) {
       // this.loading = true
