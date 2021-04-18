@@ -30,11 +30,6 @@ class Player:
             os.path.realpath(__file__)), 'spool/')
         self.__epaperImage = os.path.join(self.spool, 'paper.jpg')
 
-    def Dump(self):
-        print(self.__dict__)
-
-    def Dump2(self):
-        print(self.__dict__)
 
     def generate(self, filename, time):
         file = os.path.join(self.viddir, filename)
@@ -78,6 +73,14 @@ class Player:
         if match == False:
             self.movies.append(file)
         self.Save()
+    def DeleteFile(self, filename):
+        elm = [filename in item['filename'] for item in self.movies].index(True)
+        x = self.movies
+        del x[elm]
+        self.movies = x
+        print (self.movies)
+        self.Save()
+
 
     def files(self):
         listOfFiles = os.listdir(self.viddir)
@@ -96,9 +99,14 @@ class Player:
             # print(movie)
             if movie['frame_count'] == 0:
                 movie['frame_count'] = self.frameCount(movie['filename'])
+                self.Save()
             if movie['position'] + int(self.frames) > int(movie['frame_count']):
                 print("next movie")
-                continue
+                old = self.movies.pop(0)
+                old['position'] = 0
+                self.movies.append(old)
+                self.Save()
+                break
             frame = float(movie['position'])
             msTimecode = "%dms" % (frame*41.666666)
             self.generate(movie['filename'], msTimecode)
@@ -106,6 +114,8 @@ class Player:
                   (movie['filename'], frame))
             #print("ssajjsasajk %s %s" % movie['filename'], frame)
             movie['position'] = int(movie['position']) + int(self.frames)
+            if 'brightness' in movie:
+                self.brighten = movie['brightness']
             self.Save()
             break
         return True
@@ -140,6 +150,7 @@ class Player:
             pil_im = Image.open(self.__epaperImage)
             enhancer = ImageEnhance.Brightness(pil_im)
             # brightens the image
+            print(self.brighten)
             enhanced_im = enhancer.enhance(float(self.brighten))
             enhanced_im.convert(mode='1', dither=Image.FLOYDSTEINBERG)
 
