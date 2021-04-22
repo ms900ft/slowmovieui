@@ -82,17 +82,6 @@ class Player:
         self.Save()
 
 
-    def files(self):
-        listOfFiles = os.listdir(self.viddir)
-        pattern = "*.mp4"
-        files = []
-        for entry in listOfFiles:
-            if fnmatch.fnmatch(entry, pattern):
-                file = {}
-                file['filename'] = entry
-                files.append(file)
-                print(entry)
-                return files
 
     def nextFrame(self):
         for movie in self.movies:
@@ -122,17 +111,20 @@ class Player:
 
     def Load(self):
         conf = os.path.join(self.spool, "movielist.json")
+        files = Files()
+        fileList = files.list()
         if os.path.exists(conf):
             print("reading movielist")
             with open(conf) as fp:
                 data = json.load(fp)
+            for file in fileList:
+                if not find(data, file):
+                    data.append(file)
             self.movies = data
+
         else:
-            files = Files()
-            fileList = files.list()
             self.movies = fileList
-            self.Save()
-        print(self.movies)
+        self.Save()
 
     def Save(self):
         conf = os.path.join(self.spool, "movielist.json")
@@ -335,3 +327,9 @@ def generate_frame(in_filename, out_filename, time, width, height):
         .overwrite_output()
         .run(capture_stdout=True, capture_stderr=True)
     )
+
+def find(arr , file):
+    for x in arr:
+        if x["filename"] == file['filename']:
+            return True
+    return False
