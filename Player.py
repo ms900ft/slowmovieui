@@ -8,6 +8,7 @@ import ffmpeg
 from waveshare_epd import epd7in5_V2
 from Files import Files, fileInfo
 import json
+from fractions import Fraction
 
 
 class Player:
@@ -30,7 +31,6 @@ class Player:
             os.path.realpath(__file__)), 'spool/')
         self.__epaperImage = os.path.join(self.spool, 'paper.jpg')
 
-
     def generate(self, filename, time):
         file = os.path.join(self.viddir, filename)
         (
@@ -49,6 +49,15 @@ class Player:
         print("there are %d frames in this video" % frames)
         return frames
 
+    def movieInfo(self, filename):
+        file = os.path.join(self.viddir, filename)
+        probe = ffmpeg.probe(file)['streams'][0]
+        info = {}
+        info['fps'] = float(Fraction(probe['avg_frame_rate']))
+        info['frame_count'] = float(probe['nb_frames'])
+        # print(info)
+        return info
+
     def initEpaper(self):
         epd = epd7in5_V2.EPD()
 
@@ -62,32 +71,34 @@ class Player:
         print(self.__dict__)
 
     def AddFile(self, filename):
-        file = fileInfo(self.viddir,filename)
+        file = fileInfo(self.viddir, filename)
         match = False
-        i=0
+        i = 0
         for entry in self.movies:
             if entry['filename'] == file['filename']:
                 self.movies[i] = file
                 match = True
-            i = i +1
+            i = i + 1
         if match == False:
             self.movies.append(file)
         self.Save()
+
     def DeleteFile(self, filename):
-        elm = [filename in item['filename'] for item in self.movies].index(True)
+        elm = [filename in item['filename']
+               for item in self.movies].index(True)
         x = self.movies
         del x[elm]
         self.movies = x
-        print (self.movies)
+        print(self.movies)
         self.Save()
-
-
 
     def nextFrame(self):
         for movie in self.movies:
-            # print(movie)
+            self.movieInfo(movie['filename'])
             if movie['frame_count'] == 0:
-                movie['frame_count'] = self.frameCount(movie['filename'])
+                info = self.movieInfo(movie['filename'])
+                movie['frame_count'] = info['frame_count']
+                movie['fps'] = info['fps']
                 self.Save()
             if movie['position'] + int(self.frames) > int(movie['frame_count']):
                 print("next movie")
@@ -97,11 +108,14 @@ class Player:
                 self.Save()
                 break
             frame = float(movie['position'])
-            msTimecode = "%dms" % (frame*41.666666)
+            fps = movie.get(
+                'fps') != None and movie['fps'] > 0 and movie['fps'] or 25
+            frame_time = 1000 / fps
+            msTimecode = "%dms" % (frame * frame_time)
             self.generate(movie['filename'], msTimecode)
             print("playing %s von pos %f" %
                   (movie['filename'], frame))
-            #print("ssajjsasajk %s %s" % movie['filename'], frame)
+            # print("ssajjsasajk %s %s" % movie['filename'], frame)
             movie['position'] = int(movie['position']) + int(self.frames)
             if 'brightness' in movie:
                 self.brighten = movie['brightness']
@@ -136,8 +150,8 @@ class Player:
         self.initEpaper()
         self.Load()
         while self.nextFrame():
-            #print("next")
-            #time.sleep(2)
+            # print("next")
+            # time.sleep(2)
             epd = epd7in5_V2.EPD()
             pil_im = Image.open(self.__epaperImage)
             enhancer = ImageEnhance.Brightness(pil_im)
@@ -152,7 +166,6 @@ class Player:
             # display the image
             epd.display(epd.getbuffer(enhanced_im))
             time.sleep(int(self.delay))
-
 
     def play(self):
         frameDelay = float(self.delay)
@@ -328,7 +341,8 @@ def generate_frame(in_filename, out_filename, time, width, height):
         .run(capture_stdout=True, capture_stderr=True)
     )
 
-def find(arr , file):
+
+def find(arr, file):
     for x in arr:
         if x["filename"] == file['filename']:
             return True

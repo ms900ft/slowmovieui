@@ -35,4 +35,5 @@ def fileInfo(path, filename):
     file['brightness'] = 1
     file['frames_per_delay'] = 10
     file['delay'] = 60
+    file['fps'] = 0
     return file
