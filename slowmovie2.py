@@ -101,6 +101,7 @@ def update_list():
     print(content)
     global player
     player.movies = content
+    player.Save()
     return jsonify(content), 200
 
 
