@@ -1,0 +1,11 @@
+[Unit]
+Description=Slow Movie Player Service
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/slowmovie
+ExecStart=/usr/bin/python3 /home/pi/slowmovie/slowmovie2.py -w -i 20 -d 60 -b 2
+StandardOutput=file:/var/log/slowmovie.log
+
+[Install]
+WantedBy=multi-user.target
