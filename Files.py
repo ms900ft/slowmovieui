@@ -9,19 +9,25 @@ class Files:
             os.path.realpath(__file__)), 'Videos/')
         self.logdir = os.path.join(os.path.dirname(
             os.path.realpath(__file__)), 'logs/')
+        self.fileTypes = [".mp4", ".m4v", ".mkv", ".mov"]
 
     def list(self):
         listOfFiles = os.listdir(self.viddir)
-        pattern = "*.mp4"
+        pattern = "*.mov"
         files = []
         for entry in listOfFiles:
-            if fnmatch.fnmatch(entry, pattern):
+            if self.supported_filetype(entry):
+                # if fnmatch.fnmatch(entry, pattern):
                 file = fileInfo(self.viddir, entry)
                 files.append(file)
         return files
 
     def getFile(self, filename):
         return fileInfo(self.viddir, filename)
+
+    def supported_filetype(self, file):
+        _, ext = os.path.splitext(file)
+        return ext.lower() in self.fileTypes
 
 
 def fileInfo(path, filename):
