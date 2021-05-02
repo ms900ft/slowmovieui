@@ -13,12 +13,13 @@ from fractions import Fraction
 
 class Player:
     def __init__(self, file, delay=60, frames=10, start_width=0, brighten='2',
-                 random=False, frame=0, width=800, height=480):
+                 random=False, frame=0, width=800, height=480, contrast='1.5'):
         self.file = file
         self.delay = delay
         self.frames = frames
         self.start_width = start_width
         self.brighten = brighten
+        self.contrast = contrast
         self.random = random
         self.frame = frame
         self.width = width
@@ -155,9 +156,12 @@ class Player:
             epd = epd7in5_V2.EPD()
             pil_im = Image.open(self.__epaperImage)
             enhancer = ImageEnhance.Brightness(pil_im)
+            #enhancer = ImageEnhance.Contrast(pil_im)
             # brightens the image
             print(self.brighten)
             enhanced_im = enhancer.enhance(float(self.brighten))
+            enhancer = ImageEnhance.Contrast(enhanced_im)
+            enhanced_im = enhancer.enhance(float(self.contrast))
             enhanced_im.convert(mode='1', dither=Image.FLOYDSTEINBERG)
 
             # Dither the image into a 1 bit bitmap (Just zeros and ones)
