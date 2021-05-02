@@ -12,7 +12,7 @@
 ></v-img>
       </v-col>
       <v-col>
-        <v-list three-line class="list1">
+        <v-list  class="list1">
           <draggable v-model="movies" @change="saveList" class="row">
             <v-col
               cols="10"

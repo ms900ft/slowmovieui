@@ -25,7 +25,7 @@
       <v-file-input
         v-else
         show-size
-        accept=".mp4"
+        accept=".mp4,.mov,.m4v,.mkv"
         label="select movie"
         v-model="currentFile"
         single-line
