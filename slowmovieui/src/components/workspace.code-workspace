@@ -1,0 +1,32 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"name": "SSH FS - slowmovie",
+			"uri": "ssh://slowmovie/"
+		}
+	],
+  "settings": {
+    "sqltools.connections": [
+      {
+        "database": "/Users/ms/tmp/movielight.db",
+        "driver": "SQLite",
+        "name": "movielight",
+        "previewLimit": 50
+      }
+    ],
+    "go-tests-outline.go-test-params": "-tags fts5",
+    "vetur.format.defaultFormatterOptions": {
+      "prettier": {
+        "singleQuote": true
+      }
+    },
+    "vetur.validation.template": true,
+    "jshint.options": {
+      "esversion": 10,
+      "asi": true
+    }
+  }
+}
