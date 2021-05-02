@@ -120,6 +120,8 @@ class Player:
             movie['position'] = int(movie['position']) + int(self.frames)
             if 'brightness' in movie:
                 self.brighten = movie['brightness']
+            if 'contrast' in movie:
+                self.contrast = movie['contrast']
             self.Save()
             break
         return True

@@ -39,6 +39,7 @@ def fileInfo(path, filename):
     file['frame_count'] = 0
     file['position'] = 0
     file['brightness'] = 1
+    file['contrast'] = 1
     file['frames_per_delay'] = 10
     file['delay'] = 60
     file['fps'] = 0
