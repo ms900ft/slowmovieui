@@ -1,0 +1,117 @@
+[
+    {
+        "brightness": 1.5,
+        "delay": 60,
+        "filename": "Die_Legende_von_Paul_und_Paula.mp4",
+        "frame_count": 151422.0,
+        "frames_per_delay": 10,
+        "mod": 1618907911.5761251,
+        "position": 90400,
+        "size": 1890488581,
+        "fps": 25.0
+    },
+    {
+        "brightness": 2,
+        "delay": 60,
+        "filename": "Metropolis.mp4",
+        "frame_count": 219970,
+        "frames_per_delay": 10,
+        "mod": 1618815943.4448473,
+        "position": 6000,
+        "size": 1735675296
+    },
+    {
+        "brightness": 2,
+        "delay": 60,
+        "filename": "Easy_Rider.mp4",
+        "frame_count": 0,
+        "frames_per_delay": 10,
+        "mod": 1618837064.8360124,
+        "position": 0,
+        "size": 1439728641
+    },
+    {
+        "brightness": 2,
+        "delay": 60,
+        "filename": "M_-_Eine_Stadt_sucht_einen_Morder.mp4",
+        "frame_count": 0,
+        "frames_per_delay": 10,
+        "mod": 1618829873.1418548,
+        "position": 0,
+        "size": 2172196882
+    },
+    {
+        "brightness": 2,
+        "delay": 60,
+        "filename": "Hana-Bi.mp4",
+        "frame_count": 0,
+        "frames_per_delay": 10,
+        "mod": 1618786339.1502273,
+        "position": 0,
+        "size": 1416558224
+    },
+    {
+        "brightness": 2,
+        "delay": 60,
+        "filename": "tod_den_hippies.mp4",
+        "frame_count": 0,
+        "frames_per_delay": 10,
+        "mod": 1615280846.8497198,
+        "position": 0,
+        "size": 1184168672
+    },
+    {
+        "brightness": 2,
+        "filename": "Shining.mp4",
+        "frame_count": 343437,
+        "mod": 1617705950.6717706,
+        "position": 0,
+        "size": 1302540266
+    },
+    {
+        "brightness": 2,
+        "delay": 60,
+        "filename": "angst_essen.mp4",
+        "frame_count": 0,
+        "frames_per_delay": 10,
+        "mod": 1615280528.6755977,
+        "position": 0,
+        "size": 396573942
+    },
+    {
+        "brightness": 2,
+        "delay": 60,
+        "filename": "psycho.mp4",
+        "frame_count": 0,
+        "frames_per_delay": 10,
+        "mod": 1615280942.9778392,
+        "position": 0,
+        "size": 730724780
+    },
+    {
+        "brightness": 2,
+        "delay": 60,
+        "filename": "Der_dritte_Mann.mp4",
+        "frame_count": 0,
+        "frames_per_delay": 10,
+        "mod": 1617705935.3619623,
+        "position": 0,
+        "size": 2435729471
+    },
+    {
+        "brightness": 2,
+        "filename": "Die_Spaziergaengerin_von_Sans_Souci.mp4",
+        "frame_count": 330911,
+        "mod": 1617705943.371862,
+        "position": 0,
+        "size": 1175465715
+    },
+    {
+        "brightness": 2,
+        "filename": "Inglourious_Basterds.mp4",
+        "frame_count": 215929,
+        "mod": 1617705924.302101,
+        "position": 0,
+        "size": 949424976
+    }
+]

@@ -34,7 +34,7 @@ player = {}
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), 'Videos')
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'mp4'}
+ALLOWED_EXTENSIONS = {'mov', 'mkv','mp4'}
 cors = CORS(app)
 
 
@@ -200,6 +200,8 @@ def parse_args():
                         help="Number of frames skipped between screen updates")
     parser.add_argument('-b', '--brighten',  default=1.0,
                         help="brighten factor")
+    parser.add_argument('-c', '--contrast',  default=1.0,
+                        help="contrast factor")
     parser.add_argument('-s', '--start',
                         help="Start at a specific frame")
     parser.add_argument('-w', '--webserver', default=False, action='store_true',
@@ -213,7 +215,8 @@ def main():
     print(args)
     global player
     player = Player(file=args.file, delay=args.delay,
-                    frames=args.inc, brighten=args.brighten)
+                    frames=args.inc, brighten=args.brighten,
+                    contrast = args.contrast)
     player.Load()
     if args.webserver == True:
         server = FlaskThread()
