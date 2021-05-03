@@ -34,7 +34,7 @@ player = {}
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), 'Videos')
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'mp4'}
+ALLOWED_EXTENSIONS = {'mov', 'mkv','mp4'}
 cors = CORS(app)
 
 
