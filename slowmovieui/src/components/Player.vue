@@ -2,20 +2,29 @@
   <v-container fluid>
 
 
-    <v-row align-content="stretch">
-      <v-col cols="2">
+    <v-row  justify="center">
+      <v-col cols="auto" >
+        <v-sheet
+  color="white"
+  rounded="xl"
+  elevation="10"
+  height="240"
+  width="400">
     <v-img
-  max-height="150"
-  max-width="250"
+  max-height="240"
+  max-width="400"
   :src="imageUrl"
 
 ></v-img>
+        </v-sheet>
       </v-col>
+    </v-row>
+    <v-row align-content="stretch">
       <v-col>
         <v-list  class="list1">
           <draggable v-model="movies" @change="saveList" class="row">
             <v-col
-              cols="10"
+              cols="12"
               v-for="(item, index) in movies"
               :key="item.filename"
               style="font-weight: bold"
