@@ -34,19 +34,25 @@
                   persistent-hint
                 ></v-slider>
               </div>
-                <div style="float: left">
-                <v-menu offset-y>
+    <div style="float: left">
+    <v-menu offset-y>
 
       <template v-slot:activator="{ on, attrs }">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on: tooltip }">
         <v-btn
           color="primary"
           dark
           v-bind="attrs"
-          v-on="on"
+          v-on="{...on, ...tooltip}"
+          style="margin-right: 10px"
         >
         <v-icon v-if="brTitel(item)===''">mdi-brightness-5</v-icon>
           {{brTitel(item)}}
         </v-btn>
+         </template>
+          <span>brigthness</span>
+        </v-tooltip>
       </template>
       <v-list>
         <v-list-item
@@ -56,8 +62,42 @@
 
           <v-list-item-title>{{ itemx }}</v-list-item-title>
         </v-list-item>
+
       </v-list>
     </v-menu>
+
+
+    <v-menu offset-y >
+
+      <template v-slot:activator="{ on, attrs }">
+         <v-tooltip bottom>
+          <template v-slot:activator="{ on: tooltip }">
+        <v-btn
+          color="primary"
+          dark
+          v-bind="attrs"
+          v-on="{...on, ...tooltip}"
+        >
+        <v-icon v-if="crTitel(item)===''">mdi-contrast-box</v-icon>
+          {{crTitel(item)}}
+        </v-btn>
+          </template>
+          <span>contrast</span>
+        </v-tooltip>
+      </template>
+      <v-list>
+        <v-list-item
+          v-for="(itemx, index) in brigthen"
+          :key="index"
+           @click="changeCr(item,itemx)" >
+
+          <v-list-item-title>{{ itemx }}</v-list-item-title>
+        </v-list-item>
+
+      </v-list>
+
+    </v-menu>
+
               </div>
               <div style="float:left;width=20%">
                 <v-icon @click="deleteMovie(item, index)" right large
@@ -124,6 +164,13 @@ beforeDestroy () {
     brTitel(item) {
       if (typeof item.brightness !== 'undefined') {
         return item.brightness;
+
+      }
+      return "";
+    },
+    crTitel(item) {
+      if (typeof item.contrast !== 'undefined') {
+        return item.contrast;
 
       }
       return "";
@@ -195,6 +242,10 @@ beforeDestroy () {
     },
     changeBr(item,value) {
       item.brightness = value;
+      this.saveList()
+    },
+    changeCr(item,value) {
+      item.contrast = value;
       this.saveList()
     }
   },

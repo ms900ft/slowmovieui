@@ -13,7 +13,7 @@ Vue.config.productionTip = false
 let BaseUrl = location.protocol
 
 if (process.env.NODE_ENV === 'development') {
-  BaseUrl = 'http://slowmovie:8888'
+  BaseUrl = 'http://grosspi:8888'
 }
 
 axios.defaults.baseURL = BaseUrl
