@@ -19,7 +19,7 @@
         </v-sheet>
       </v-col>
     </v-row>
-    <v-row align-content="stretch">
+    <v-row align-content="stretch" >
       <v-col>
         <v-list  class="list1">
           <draggable v-model="movies" @change="saveList" class="row">
@@ -44,68 +44,23 @@
                 ></v-slider>
               </div>
     <div style="float: left">
-    <v-menu offset-y>
 
-      <template v-slot:activator="{ on, attrs }">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on: tooltip }">
-        <v-btn
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="{...on, ...tooltip}"
-          style="margin-right: 10px"
-        >
-        <v-icon v-if="brTitel(item)===''">mdi-brightness-5</v-icon>
-          {{brTitel(item)}}
-        </v-btn>
-         </template>
-          <span>brigthness</span>
-        </v-tooltip>
-      </template>
-      <v-list>
-        <v-list-item
-          v-for="(itemx, index) in brigthen"
-          :key="index"
-           @click="changeBr(item,itemx)" >
-
-          <v-list-item-title>{{ itemx }}</v-list-item-title>
-        </v-list-item>
-
-      </v-list>
-    </v-menu>
-
-
-    <v-menu offset-y >
-
-      <template v-slot:activator="{ on, attrs }">
-         <v-tooltip bottom>
-          <template v-slot:activator="{ on: tooltip }">
-        <v-btn
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="{...on, ...tooltip}"
-        >
-        <v-icon v-if="crTitel(item)===''">mdi-contrast-box</v-icon>
-          {{crTitel(item)}}
-        </v-btn>
-          </template>
-          <span>contrast</span>
-        </v-tooltip>
-      </template>
-      <v-list>
-        <v-list-item
-          v-for="(itemx, index) in brigthen"
-          :key="index"
-           @click="changeCr(item,itemx)" >
-
-          <v-list-item-title>{{ itemx }}</v-list-item-title>
-        </v-list-item>
-
-      </v-list>
-
-    </v-menu>
+    <mbutton
+    type="brightness"
+    :movie="item"
+    tooltip="brigthness"
+    v-on:saveList="saveList()"
+    icon="mdi-brightness-5"
+    >
+    </mbutton>
+    <mbutton
+    type="contrast"
+    :movie="item"
+    tooltip="contrast"
+    v-on:saveList="saveList()"
+    icon="mdi-contrast-box"
+    >
+    </mbutton>
 
               </div>
               <div style="float:left;width=20%">
@@ -126,6 +81,7 @@
 
 <script>
 import slowMovieApi from '@/services/SlowMovieApi';
+import Mbutton from '@/components/menu/mbutton'
 // import {Drag,DropList} from "vue-easy-dnd";
 import draggable from 'vuedraggable';
 
@@ -134,6 +90,7 @@ export default {
   components: {
     // Drag,
     // DropList,
+    Mbutton,
     draggable
   },
   props: {
