@@ -1,6 +1,5 @@
 <template>
   <v-menu offset-y>
-dkdsldksl
       <template v-slot:activator="{ on, attrs }">
         <v-tooltip bottom>
           <template v-slot:activator="{ on: ttip }">
