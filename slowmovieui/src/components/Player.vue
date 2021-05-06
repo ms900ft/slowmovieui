@@ -1,27 +1,26 @@
 <template>
   <v-container fluid>
-
-
-    <v-row  justify="center">
-      <v-col cols="auto" >
+    <v-row justify="center">
+      <v-col cols="auto">
         <v-sheet
-  color="white"
-  rounded="xl"
-  elevation="10"
-  height="240"
-  width="400">
-    <v-img
-  max-height="240"
-  max-width="400"
-  :src="imageUrl"
+          color="white"
+          rounded="xl"
+          elevation="10"
+          max-height="240"
+          max-width="400"
+        >
+          <v-img
+            max-height="240"
+            max-width="400"
 
-></v-img>
+            :src="imageUrl"
+          ></v-img>
         </v-sheet>
       </v-col>
     </v-row>
-    <v-row align-content="stretch" >
+    <v-row align-content="stretch">
       <v-col>
-        <v-list  class="list1">
+        <v-list class="list1">
           <draggable v-model="movies" @change="saveList" class="row">
             <v-col
               cols="12"
@@ -29,10 +28,10 @@
               :key="item.filename"
               style="font-weight: bold"
             >
-              <div style="width:50%;float:left">
+              <div style="width: 50%; float: left">
                 {{ item.filename }}
               </div>
-              <div style="float: left;width:200px">
+              <div style="float: left; width: 200px">
                 <v-slider
                   :value="getPostion(item)"
                   min="0"
@@ -43,25 +42,23 @@
                   persistent-hint
                 ></v-slider>
               </div>
-    <div style="float: left">
-
-    <mbutton
-    type="brightness"
-    :movie="item"
-    tooltip="brigthness"
-    v-on:saveList="saveList()"
-    icon="mdi-brightness-5"
-    >
-    </mbutton>
-    <mbutton
-    type="contrast"
-    :movie="item"
-    tooltip="contrast"
-    v-on:saveList="saveList()"
-    icon="mdi-contrast-box"
-    >
-    </mbutton>
-
+              <div style="float: left">
+                <mbutton
+                  type="brightness"
+                  :movie="item"
+                  tooltip="brigthness"
+                  v-on:saveList="saveList()"
+                  icon="mdi-brightness-5"
+                >
+                </mbutton>
+                <mbutton
+                  type="contrast"
+                  :movie="item"
+                  tooltip="contrast"
+                  v-on:saveList="saveList()"
+                  icon="mdi-contrast-box"
+                >
+                </mbutton>
               </div>
               <div style="float:left;width=20%">
                 <v-icon @click="deleteMovie(item, index)" right large
@@ -70,7 +67,6 @@
               </div>
             </v-col>
           </draggable>
-
         </v-list>
       </v-col>
     </v-row>
@@ -80,13 +76,13 @@
 
 
 <script>
-import slowMovieApi from '@/services/SlowMovieApi';
-import Mbutton from '@/components/menu/mbutton'
+import slowMovieApi from "@/services/SlowMovieApi";
+import Mbutton from "@/components/menu/mbutton";
 // import {Drag,DropList} from "vue-easy-dnd";
-import draggable from 'vuedraggable';
+import draggable from "vuedraggable";
 
 export default {
-  name: 'Player',
+  name: "Player",
   components: {
     // Drag,
     // DropList,
@@ -98,20 +94,20 @@ export default {
   },
   data() {
     return {
-      msg: 'testxx',
+      msg: "testxx",
       total: 0,
       movies: [],
-      brigthen: [0,0.5,1,1.5,2,2.5,3],
-      imageUrl: this.$baseURL +'/img/paper.jpg'
-     // items1: [],
+      brigthen: [0, 0.5, 1, 1.5, 2, 2.5, 3],
+      imageUrl: this.$baseURL + "/img/paper.jpg"
+      // items1: [],
     };
   },
-  created () {
-  this.interval = setInterval(this.refreshData, 60000)
-},
-beforeDestroy () {
-  clearInterval(this.interval)
-},
+  created() {
+    this.interval = setInterval(this.refreshData, 60000);
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
+  },
   mounted() {
     this.getMovies();
   },
@@ -128,21 +124,20 @@ beforeDestroy () {
   },
   methods: {
     brTitel(item) {
-      if (typeof item.brightness !== 'undefined') {
+      if (typeof item.brightness !== "undefined") {
         return item.brightness;
-
       }
       return "";
     },
     crTitel(item) {
-      if (typeof item.contrast !== 'undefined') {
+      if (typeof item.contrast !== "undefined") {
         return item.contrast;
-
       }
       return "";
     },
     refreshData() {
-      this.imageUrl = this.$baseURL + '/img/paper.jpg?x=' + new Date().getTime();
+      this.imageUrl =
+        this.$baseURL + "/img/paper.jpg?x=" + new Date().getTime();
     },
     getMovies($state) {
       // this.loading = true
@@ -171,10 +166,10 @@ beforeDestroy () {
       slowMovieApi
         .updateList(this.movies)
         .then(response => {
-          console.log('------------------------------------');
+          console.log("------------------------------------");
           console.log(this.movies);
           console.log(response);
-          console.log('------------------------------------');
+          console.log("------------------------------------");
         })
         .catch(error => {
           console.log(error);
@@ -184,10 +179,10 @@ beforeDestroy () {
       slowMovieApi
         .delete(item)
         .then(response => {
-          console.log('------------------------------------');
+          console.log("------------------------------------");
           console.log(item);
           console.log(response);
-          console.log('------------------------------------');
+          console.log("------------------------------------");
           this.movies.splice(index, 1);
         })
         .catch(error => {
@@ -196,7 +191,7 @@ beforeDestroy () {
     },
     changePostion(item, value) {
       item.position = value * 25 * 60;
-      this.saveList()
+      this.saveList();
     },
     getPostion(item) {
       const i = parseInt(item.position / 25 / 60);
@@ -206,20 +201,20 @@ beforeDestroy () {
       const i = parseInt(item.frame_count / 25 / 60);
       return i;
     },
-    changeBr(item,value) {
+    changeBr(item, value) {
       item.brightness = value;
-      this.saveList()
+      this.saveList();
     },
-    changeCr(item,value) {
+    changeCr(item, value) {
       item.contrast = value;
-      this.saveList()
+      this.saveList();
     }
   },
   watch: {
-    '$store.state.listChanged'() {
+    "$store.state.listChanged"() {
       //console.log('itemwatch')
       this.getMovies();
-      this.$store.commit('setListChanged', false);
+      this.$store.commit("setListChanged", false);
     }
   }
 };
@@ -229,7 +224,7 @@ beforeDestroy () {
 html,
 body {
   height: 100%;
-  font-family: 'Roboto';
+  font-family: "Roboto";
 }
 
 .list1 {
@@ -249,16 +244,11 @@ body {
   cursor: inherit !important;
 }
 
-.v-text-field.v-text-field--solo .v-input__control{
-    min-height: 10px;
+.v-text-field.v-text-field--solo .v-input__control {
+  min-height: 10px;
 }
 
-.v-label{
+.v-label {
   font-size: 10px;
 }
-
-
-
-
-
 </style>
