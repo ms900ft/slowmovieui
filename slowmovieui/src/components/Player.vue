@@ -21,7 +21,13 @@
     <v-row align-content="stretch">
       <v-col>
         <v-list class="list1">
-          <draggable v-model="movies" @change="saveList" class="row">
+          <draggable v-model="movies" @change="saveList" :animation="500"
+           delay="250"
+          :delay-on-touch-only="true"
+        @start="dragging = true"
+        ghost-class="ghost"
+
+        @end="dragging = false" class="list row">
             <v-col
               cols="12"
               v-for="(item, index) in movies"
@@ -250,5 +256,15 @@ body {
 
 .v-label {
   font-size: 10px;
+}
+
+.ghost {
+  opacity: 0.5;
+  background: #c8ebfb;
+}
+
+.list {
+  /* background: #e3e6e7; */
+
 }
 </style>
