@@ -20,19 +20,20 @@
     </v-row>
     <v-row align-content="stretch">
       <v-col>
-        <v-list class="list1">
+        <v-list >
           <draggable v-model="movies" @change="saveList" :animation="500"
            delay="250"
           :delay-on-touch-only="true"
         @start="dragging = true"
         ghost-class="ghost"
 
-        @end="dragging = false" class="list row">
+        @end="dragging = false" class="row">
             <v-col
               cols="12"
               v-for="(item, index) in movies"
               :key="item.filename"
               style="font-weight: bold"
+              class="list"
             >
               <div style="width: 50%; float: left">
                 {{ item.filename }}
@@ -264,7 +265,11 @@ body {
 }
 
 .list {
-  /* background: #e3e6e7; */
-
+  background: #e3e6e7;
+  border: 3px solid white;
+  background-clip: border-box;
+  background-origin: border-box;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 </style>
