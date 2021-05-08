@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid >
     <v-row justify="center">
       <v-col cols="auto">
         <v-sheet
@@ -18,7 +18,7 @@
         </v-sheet>
       </v-col>
     </v-row>
-    <v-row align-content="stretch">
+    <v-row align-content="stretch" >
       <v-col>
         <v-list >
           <draggable v-model="movies" @change="saveList" :animation="500"
@@ -34,11 +34,12 @@
               :key="item.filename"
               style="font-weight: bold"
               class="list"
+
             >
-              <div style="width: 50%; float: left">
+              <div  class="title">
                 {{ item.filename }}
               </div>
-              <div style="float: left; width: 200px">
+              <div style="float: left; width: 25%">
                 <v-slider
                   :value="getPostion(item)"
                   min="0"
@@ -49,7 +50,7 @@
                   persistent-hint
                 ></v-slider>
               </div>
-              <div style="float: left">
+              <div style="float: right">
                 <mbutton
                   type="brightness"
                   :movie="item"
@@ -66,11 +67,12 @@
                   icon="mdi-contrast-box"
                 >
                 </mbutton>
-              </div>
-              <div style="float:left;width=20%">
+
+
                 <v-icon @click="deleteMovie(item, index)" right large
                   >mdi-delete-forever-outline</v-icon
                 >
+
               </div>
             </v-col>
           </draggable>
@@ -271,5 +273,12 @@ body {
   background-origin: border-box;
   background-size: cover;
   background-repeat: no-repeat;
+}
+.title {
+  width: 50%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  float: left;
 }
 </style>
