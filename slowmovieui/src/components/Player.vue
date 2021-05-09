@@ -198,15 +198,15 @@ export default {
         });
     },
     changePostion(item, value) {
-      item.position = value * item.fps * 60;
+      item.position = value * this.frameRate(item) * 60;
       this.saveList();
     },
     getPostion(item) {
-      const i = parseInt(item.position / item.fps / 60);
+      const i = parseInt(item.position / this.frameRate(item) / 60);
       return i;
     },
     getMax(item) {
-      const i = parseInt(item.frame_count / item.fps / 60);
+      const i = parseInt(item.frame_count / this.frameRate(item) / 60);
       return i;
     },
     changeBr(item, value) {
@@ -216,6 +216,12 @@ export default {
     changeCr(item, value) {
       item.contrast = value;
       this.saveList();
+    },
+    frameRate(item) {
+      if (item.fps !== 0) {
+        return (item.fps);
+      }
+      return 25;
     }
   },
   watch: {
