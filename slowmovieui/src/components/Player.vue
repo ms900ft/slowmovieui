@@ -198,15 +198,15 @@ export default {
         });
     },
     changePostion(item, value) {
-      item.position = value * 25 * 60;
+      item.position = value * item.fps * 60;
       this.saveList();
     },
     getPostion(item) {
-      const i = parseInt(item.position / 25 / 60);
+      const i = parseInt(item.position / item.fps / 60);
       return i;
     },
     getMax(item) {
-      const i = parseInt(item.frame_count / 25 / 60);
+      const i = parseInt(item.frame_count / item.fps / 60);
       return i;
     },
     changeBr(item, value) {
