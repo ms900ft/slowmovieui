@@ -218,7 +218,7 @@ export default {
       this.saveList();
     },
     frameRate(item) {
-      if (item.fps === undefined) {
+      if (item.fps !== undefined) {
         return (item.fps);
       }
       return 25;
