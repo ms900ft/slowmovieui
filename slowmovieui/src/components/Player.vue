@@ -2,15 +2,10 @@
   <v-container fluid>
     <v-row justify="center">
       <v-col cols="auto">
-        <v-sheet
-          color="white"
-          rounded="xl"
-          elevation="10"
-          max-height="240"
-          max-width="400"
-        >
           <v-img max-height="240" max-width="400" :src="imageUrl" class="rounded-lg"></v-img>
-        </v-sheet>
+      </v-col>
+       <v-col cols="auto">
+          <v-img max-height="240" max-width="400" :src="preViewUrl" class="rounded-lg"></v-img>
       </v-col>
     </v-row>
     <v-row align-content="stretch">
@@ -69,7 +64,6 @@
                 <v-btn
                   color="primary"
                   dark
-                  v-bind="attrs"
                   @click="deleteMovie(item, index)"
                   style="margin-right: 10px"
                 >
@@ -109,12 +103,13 @@ export default {
       total: 0,
       movies: [],
       brigthen: [0, 0.5, 1, 1.5, 2, 2.5, 3],
-      imageUrl: this.$baseURL + "/img/paper.jpg"
+      imageUrl: this.$baseURL + "/img/paper.jpg",
+      preViewUrl: this.$baseURL + "/img/preview.jpg"
       // items1: [],
     };
   },
   created() {
-    this.interval = setInterval(this.refreshData, 60000);
+    this.interval = setInterval(this.refreshData, 30000);
   },
   beforeDestroy() {
     clearInterval(this.interval);
@@ -149,6 +144,8 @@ export default {
     refreshData() {
       this.imageUrl =
         this.$baseURL + "/img/paper.jpg?x=" + new Date().getTime();
+      this.preViewUrl =
+        this.$baseURL + "/img/preview.jpg?x=" + new Date().getTime();
     },
     getMovies($state) {
       // this.loading = true
