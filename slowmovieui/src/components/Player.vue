@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid >
+  <v-container fluid>
     <v-row justify="center">
       <v-col cols="auto">
         <v-sheet
@@ -9,34 +9,32 @@
           max-height="240"
           max-width="400"
         >
-          <v-img
-            max-height="240"
-            max-width="400"
-
-            :src="imageUrl"
-          ></v-img>
+          <v-img max-height="240" max-width="400" :src="imageUrl" class="rounded-lg"></v-img>
         </v-sheet>
       </v-col>
     </v-row>
-    <v-row align-content="stretch" >
+    <v-row align-content="stretch">
       <v-col>
-        <v-list >
-          <draggable v-model="movies" @change="saveList" :animation="500"
-           delay="250"
-          :delay-on-touch-only="true"
-        @start="dragging = true"
-        ghost-class="ghost"
-
-        @end="dragging = false" class="row">
+        <v-list>
+          <draggable
+            v-model="movies"
+            @change="saveList"
+            :animation="500"
+            delay="250"
+            :delay-on-touch-only="true"
+            @start="dragging = true"
+            ghost-class="ghost"
+            @end="dragging = false"
+            class="row"
+          >
             <v-col
               cols="12"
               v-for="(item, index) in movies"
               :key="item.filename"
               style="font-weight: bold"
               class="list"
-
             >
-              <div  class="title">
+              <div class="title">
                 {{ item.filename }}
               </div>
               <div style="float: left; width: 25%">
@@ -68,11 +66,15 @@
                 >
                 </mbutton>
 
-
-                <v-icon @click="deleteMovie(item, index)" right large
-                  >mdi-delete-forever-outline</v-icon
+                <v-btn
+                  color="primary"
+                  dark
+                  v-bind="attrs"
+                  @click="deleteMovie(item, index)"
+                  style="margin-right: 10px"
                 >
-
+                  <v-icon>mdi-delete-forever-outline</v-icon>
+                </v-btn>
               </div>
             </v-col>
           </draggable>
