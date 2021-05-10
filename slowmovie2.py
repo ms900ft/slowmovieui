@@ -59,7 +59,7 @@ def test():
 
 @app.route('/img/<path:filename>')
 def send_img(filename):
-    return send_from_directory(app.root_path + '/spool', filename)
+    return send_from_directory(app.root_path + '/spool', filename, cache_timeout=0)
     # x = send_static_file('grap.jpg')
     # return send_static_file('grap.jpg')
 
