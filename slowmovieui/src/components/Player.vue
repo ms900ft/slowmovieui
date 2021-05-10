@@ -1,5 +1,18 @@
 <template>
   <v-container fluid>
+    <v-dialog v-if="dialog" v-model="dialog" persistent max-width="290">
+    <v-card>
+      <v-card-title class="headline">
+        Really delete:
+        <span class="movietitle">{{item.filename}}</span>
+      </v-card-title>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="primary" text @click="dialog = false">Cancel</v-btn>
+        <v-btn color="primary" text @click="deleteMovie(item)">Delete</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
     <v-row justify="center">
       <v-col cols="auto">
           <v-img max-height="240" max-width="400" :src="imageUrl" class="rounded-lg"></v-img>
@@ -64,7 +77,8 @@
                 <v-btn
                   color="primary"
                   dark
-                  @click="deleteMovie(item, index)"
+                  @click="openDialog(item,index)"
+
                   style="margin-right: 10px"
                 >
                   <v-icon>mdi-delete-forever-outline</v-icon>
@@ -104,7 +118,8 @@ export default {
       movies: [],
       brigthen: [0, 0.5, 1, 1.5, 2, 2.5, 3],
       imageUrl: this.$baseURL + "/img/paper.jpg",
-      preViewUrl: this.$baseURL + "/img/preview.jpg"
+      preViewUrl: this.$baseURL + "/img/preview.jpg",
+      dialog: false
       // items1: [],
     };
   },
@@ -184,6 +199,7 @@ export default {
         });
     },
     deleteMovie(item, index) {
+      this.dialog = false;
       slowMovieApi
         .delete(item)
         .then(response => {
@@ -222,6 +238,11 @@ export default {
         return (item.fps);
       }
       return 25;
+    },
+    openDialog(item,index) {
+      this.dialog = true;
+      this.index = index;
+      this.item = item;
     }
   },
   watch: {
