@@ -44,11 +44,6 @@ class Player:
             .run(capture_stdout=True, capture_stderr=True)
         )
 
-    def frameCount(self, filename):
-        file = os.path.join(self.viddir, filename)
-        frames = int(ffmpeg.probe(file)['streams'][0]['nb_frames'])
-        print("there are %d frames in this video" % frames)
-        return frames
 
     def movieInfo(self, filename):
         file = os.path.join(self.viddir, filename)
@@ -81,6 +76,9 @@ class Player:
                 match = True
             i = i + 1
         if match == False:
+            info = self.movieInfo(filename)
+            file['frame_count'] = info['frame_count']
+            file['fps'] = info['fps']
             self.movies.append(file)
         self.Save()
 
