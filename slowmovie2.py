@@ -206,6 +206,8 @@ def parse_args():
                         help="Start at a specific frame")
     parser.add_argument('-w', '--webserver', default=False, action='store_true',
                         help="Start admin server")
+    parser.add_argument('-R', '--random_movie', default=False, action='store_true',
+                        help="Ramdom Movie: chooses random movie for each refresh")
     args = parser.parse_args()
     return args
 
@@ -216,7 +218,8 @@ def main():
     global player
     player = Player(file=args.file, delay=args.delay,
                     frames=args.inc, brighten=args.brighten,
-                    contrast = args.contrast)
+                    contrast = args.contrast, random=args.random,
+                    random_movie=args.random_movie)
     player.Load()
     if args.webserver == True:
         server = FlaskThread()

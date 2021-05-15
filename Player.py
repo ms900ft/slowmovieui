@@ -13,7 +13,8 @@ from fractions import Fraction
 
 class Player:
     def __init__(self, file, delay=60, frames=10, start_width=0, brighten='2',
-                 random=False, frame=0, width=800, height=480, contrast='1.5'):
+                 random=False, frame=0, width=800, height=480, contrast='1.5',
+                 random_movie=False):
         self.file = file
         self.delay = delay
         self.frames = frames
@@ -24,6 +25,7 @@ class Player:
         self.frame = frame
         self.width = width
         self.height = height
+        self.random_movie = random_movie
         self.viddir = os.path.join(os.path.dirname(
             os.path.realpath(__file__)), 'Videos/')
         self.logdir = os.path.join(os.path.dirname(
@@ -33,6 +35,11 @@ class Player:
         self.__epaperImage = os.path.join(self.spool, 'paper.jpg')
 
     def generate(self, movie, frame):
+        print(movie)
+        if self.random:
+            frame = random.randint(0,movie['frame_count'])
+        print("playing %s von pos %f" %
+                  (movie['filename'], frame))
         fps = movie.get(
                 'fps') != None and movie['fps'] > 0 and movie['fps'] or 25
         frame_time = 1000 / fps
@@ -102,25 +109,31 @@ class Player:
 
     def nextFrame(self):
         for movie in self.movies:
-            if movie['frame_count'] == 0:
-                info = self.movieInfo(movie['filename'])
-                movie['frame_count'] = info['frame_count']
-                movie['fps'] = info['fps']
-                self.Save()
-            if movie['position'] + int(self.frames) > int(movie['frame_count']):
-                print("next movie")
-                old = self.movies.pop(0)
-                old['position'] = 0
-                self.movies.append(old)
-                self.Save()
-                break
-            frame = float(movie['position'])
-            self.generate(movie, frame)
-            movie['position'] = int(movie['position']) + int(self.frames)
-            print("playing %s von pos %f" %
-                  (movie['filename'], frame))
-            # print("ssajjsasajk %s %s" % movie['filename'], frame)
-            break
+                if movie['frame_count'] == 0:
+                    print(movie)
+                    info = self.movieInfo(movie['filename'])
+                    movie['frame_count'] = info['frame_count']
+                    movie['fps'] = info['fps']
+                    self.Save()
+                if movie['position'] + int(self.frames) > int(movie['frame_count']):
+                    print("next movie")
+                    old = self.movies.pop(0)
+                    old['position'] = 0
+                    self.movies.append(old)
+                    self.Save()
+                    break
+        movie={}
+        if self.random_movie:
+            print ("random movie")
+            index = random.randint(0,len(self.movies) -1 )
+            movie = self.movies[index]
+        else:
+            movie = self.movies[0]
+
+        frame = float(movie['position'])
+        self.generate(movie, frame)
+        movie['position'] = int(movie['position']) + int(self.frames)
+                # print("ssajjsasajk %s %s" % movie['filename'], frame)
         return True
 
     def Load(self):
