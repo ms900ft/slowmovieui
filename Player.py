@@ -32,17 +32,26 @@ class Player:
             os.path.realpath(__file__)), 'spool/')
         self.__epaperImage = os.path.join(self.spool, 'paper.jpg')
 
-    def generate(self, filename, time):
-        file = os.path.join(self.viddir, filename)
+    def generate(self, movie, frame):
+        fps = movie.get(
+                'fps') != None and movie['fps'] > 0 and movie['fps'] or 25
+        frame_time = 1000 / fps
+        msTimecode = "%dms" % (frame * frame_time)
+        file = os.path.join(self.viddir, movie['filename'])
         (
             ffmpeg
-            .input(file, ss=time)
+            .input(file, ss=msTimecode)
             .filter('scale', self.width, self.height, force_original_aspect_ratio=0)
             .filter('pad', self.width, self.height, -1, -1)
             .output(self.__epaperImage, vframes=1)
             .overwrite_output()
             .run(capture_stdout=True, capture_stderr=True)
         )
+        if 'brightness' in movie:
+            self.brighten = movie['brightness']
+        if 'contrast' in movie:
+            self.contrast = movie['contrast']
+        self.Save()
 
 
     def movieInfo(self, filename):
@@ -93,7 +102,6 @@ class Player:
 
     def nextFrame(self):
         for movie in self.movies:
-            self.movieInfo(movie['filename'])
             if movie['frame_count'] == 0:
                 info = self.movieInfo(movie['filename'])
                 movie['frame_count'] = info['frame_count']
@@ -107,20 +115,11 @@ class Player:
                 self.Save()
                 break
             frame = float(movie['position'])
-            fps = movie.get(
-                'fps') != None and movie['fps'] > 0 and movie['fps'] or 25
-            frame_time = 1000 / fps
-            msTimecode = "%dms" % (frame * frame_time)
-            self.generate(movie['filename'], msTimecode)
+            self.generate(movie, frame)
+            movie['position'] = int(movie['position']) + int(self.frames)
             print("playing %s von pos %f" %
                   (movie['filename'], frame))
             # print("ssajjsasajk %s %s" % movie['filename'], frame)
-            movie['position'] = int(movie['position']) + int(self.frames)
-            if 'brightness' in movie:
-                self.brighten = movie['brightness']
-            if 'contrast' in movie:
-                self.contrast = movie['contrast']
-            self.Save()
             break
         return True
 
