@@ -1,14 +1,9 @@
-# SlowMovie
+# SlowMovieUI
 
-![](Extras/img.jpg)
+I built Tom Whitwell wonderful [project](https://medium.com/@tomwhitwell/how-to-build-a-very-slow-movie-player-in-2020-c5745052e4e4
+) some time ago, which I really enjoyed. The only negative was that I always had to log in to my Rasberry PI to make changes and restart the Skriptand wait a wile to see the changes, so I added a web UI to the Python script.
+With the UI it is possible to add new movies, delete files, change the order, brightness, contrast and position.
 
-## Python / Raspberry Pi interpretation of Bryan Boyer's Very Slow Movie Player  
 
-
-Full writeup of this project here:   
-https://medium.com/@tomwhitwell/how-to-build-a-very-slow-movie-player-in-2020-c5745052e4e4
-
-Bryan's original post here:  
-https://medium.com/s/story/very-slow-movie-player-499f76c48b62  
-
+![screenshot](/doc/slowmovieUI.png "slowmovieUI")
 
