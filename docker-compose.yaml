@@ -11,6 +11,5 @@ services:
     volumes:
       - spool:/python-docker/spool
       - /home/pi/slowmovie/Videos:/python-docker/Video
-    environment:
     ports:
       - 8888:8888
