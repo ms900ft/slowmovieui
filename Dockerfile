@@ -13,5 +13,5 @@ RUN pip3 install -r requirements.txt
 COPY . .
 RUN cd /python-docker/e-paper/RaspberryPi\&JetsonNano/python && python setup.py install
 
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+CMD [ "python3", "slowmovie2.py" "-i 20" "-d 60" "-b 2" -"w"]
 
