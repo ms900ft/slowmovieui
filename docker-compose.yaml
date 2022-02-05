@@ -6,6 +6,7 @@ services:
   slowmovie:
     build: .
     restart: always
+    privileged: true
     volumes:
       - spool:/python-docker/spool
       - /home/pi/slowmovie/Videos:/python-docker/Video
