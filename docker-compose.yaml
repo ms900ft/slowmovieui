@@ -1,0 +1,16 @@
+version: "3"
+
+volumes:
+  spool: null
+services:
+  slowmovie:
+    build: .
+    restart: always
+    networks:
+      - nextcloud
+    volumes:
+      - spool:/python-docker/spool
+      - /home/pi/slowmovie/Videos:/python-docker/Video
+    environment:
+    ports:
+      - 8888:8888
