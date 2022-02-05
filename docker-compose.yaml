@@ -9,6 +9,6 @@ services:
     privileged: true
     volumes:
       - spool:/python-docker/spool
-      - /home/pi/slowmovie/Videos:/python-docker
+      - /home/pi/slowmovie/Videos:/python-docker/Video
     ports:
       - 8888:8888
