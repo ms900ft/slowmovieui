@@ -5,6 +5,7 @@ volumes:
 services:
   slowmovie:
     build: .
+    command: python3 /python-docker/slowmovie2.py -i 20 -d 120 -b 2 -w -r 
     restart: always
     privileged: true
     volumes:
